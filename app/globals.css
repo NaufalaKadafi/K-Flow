@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono); 
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+
+html, body { max-width: 100%; overflow-x: hidden; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+code, pre, kbd, samp { font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+@keyframes marquee {
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-50.0001%, 0, 0); }
+}
+.pause-on-hover:hover .marquee { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .marquee { animation: none !important; transform: none !important; }
+}
+
+body.focus-mode header {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity .25s ease, transform .25s ease;
+}
