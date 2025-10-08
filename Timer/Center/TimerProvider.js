@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useCallback, useState } from "react";
 import { PRESETS, sec } from "../Utils";
 import { ensureNotifyPermission } from "../../lib/notify";
 import { useDistractionStore } from "../../lib/useDistractionStore";
-import { useDistractionLogger } from "../../lib/useDistractionLogger";
 import { TimerCtx } from "./TimerContext";
 import { useTimerCore } from "./useTimerCore";
 import { useFlowGuard } from "./useFlowGuard";
@@ -30,7 +29,6 @@ export default function TimerProvider({ children }) {
   const [showSummary, setShowSummary] = useState(false);
   const [summary, setSummary] = useState(null);
 
-
   const {
     tasks,
     setTasks,
@@ -44,8 +42,6 @@ export default function TimerProvider({ children }) {
 
   const store = useDistractionStore?.() ?? {};
   const { current: currentSession, endSession, logManual } = store;
-
-  useDistractionLogger(); 
 
   const [focusCardOpen, setFocusCardOpen] = useState(false);
   const [focusCardTitle, setFocusCardTitle] = useState("");
@@ -65,7 +61,6 @@ export default function TimerProvider({ children }) {
     if (focusCardTimeoutRef.current) window.clearTimeout(focusCardTimeoutRef.current);
   }, []);
 
-
   useEffect(() => {
     ensureNotifyPermission().catch(() => {});
   }, []);
@@ -76,7 +71,6 @@ export default function TimerProvider({ children }) {
     }
   }, [focusMode]);
 
-
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -86,7 +80,7 @@ export default function TimerProvider({ children }) {
       Object.entries(s).forEach(([k, v]) => {
         switch (k) {
           case "presetId": {
-            const found = PRESETS.find(p => p.id === v);
+            const found = PRESETS.find((p) => p.id === v);
             if (found) setPreset(found);
             break;
           }
@@ -110,7 +104,6 @@ export default function TimerProvider({ children }) {
     } catch {}
   }, [setTasks, setActiveTaskId]);
 
-
   useEffect(() => {
     const payload = {
       presetId: preset.id,
@@ -124,35 +117,24 @@ export default function TimerProvider({ children }) {
   }, [
     preset, stage, running, remaining, targetAt, cycles,
     focusMode, intention, tags, ledger, tasks, activeTaskId,
-    stageStartedAt, activeMs, tickStartAt
+    stageStartedAt, activeMs, tickStartAt,
   ]);
-
 
   useEffect(() => {
     if (running) return;
     setRem(stage === "focus" ? sec(preset.focusMin) : sec(preset.breakMin));
-  }, [preset, stage]);
+  }, [preset, stage, running]);
 
-
-  const logDistraction = useCallback(async (label, kind = "manual") => {
-    const entry = { kind, label, t: Date.now() };
-    setLedger(prev => [...prev, entry]);
-    try {
-      await logManual?.(label);
-    } catch (err) {
-      console.warn("Gagal menyimpan distraksi:", err);
-    }
-  }, [logManual]);
-
-  useEffect(() => {
-    const onAutoLedger = (e) => {
-      const label = e.detail?.label || "TabOut";
-      logDistraction(label, "auto");
-    };
-    window.addEventListener("tuntasin:auto-ledger", onAutoLedger);
-    return () => window.removeEventListener("tuntasin:auto-ledger", onAutoLedger);
-  }, [logDistraction]);
-
+  const manualLogDistraction = useCallback(
+    async (label, kind = "manual") => {
+      const entry = { kind, label, t: Date.now() };
+      setLedger((prev) => [...prev, entry]);
+      try {
+        await logManual?.(label);
+      } catch {}
+    },
+    [logManual]
+  );
 
   const timerCore = useTimerCore({
     preset, setPreset, stage, setStage, running, setRun,
@@ -163,8 +145,18 @@ export default function TimerProvider({ children }) {
     setShowSummary, setSummary, currentSession, endSession,
   });
 
-  useFlowGuard({ stage, running, startedOnce, openFocusCard, setLedger });
+  const flow = useFlowGuard({
+    stage,
+    running,
+    startedOnce,
+    openFocusCard,
+    setLedger,
+  });
 
+  const logDistraction =
+    flow?.logDistraction ?? manualLogDistraction; // UI pakai ini
+  const canLogDistraction =
+    flow?.canLogDistraction ?? (() => stage === "focus");
 
   const canEnd = !!stageStartedAt || running;
 
@@ -179,6 +171,7 @@ export default function TimerProvider({ children }) {
     addTask, removeTask, setActiveTask, clearDoneTasks,
     canEnd,
     logDistraction,
+    canLogDistraction,
     ...timerCore,
   };
 

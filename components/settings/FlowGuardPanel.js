@@ -176,7 +176,7 @@ export default function FlowGuardPanel({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="rounded-xl p-3 ring-1 ring-emerald-200/60 dark:ring-emerald-300/20 bg-emerald-50/40 dark:bg-emerald-900/10">
                 <div className="text-[11px] uppercase tracking-wide text-emerald-900/70 dark:text-emerald-200/70 flex items-center gap-2">
-                  <TimerIcon className="h-3.5 w-3.5" /> Jeda tab-out
+                  <TimerIcon className="h-3.5 w-3.5" /> Jeda Notifikasi
                 </div>
                 <div className="mt-2 flex items-center gap-2">
                   <input
@@ -269,7 +269,7 @@ export default function FlowGuardPanel({
 
           {showFooterNote && (
             <p className="mt-3 text-xs text-emerald-900/75 dark:text-emerald-200/70">
-              Saat <strong>Flow Guard</strong> aktif, K-Flow akan mengirim nudge ketika kamu tab-out
+              Saat <strong>Flow Guard</strong> aktif, K-Flow akan mengintervensi ketika kamu tab-out
               di fase fokus, mengikuti jeda &amp; cooldown di atas. “Toleransi tab-out”
               akan mengabaikan sejumlah tab-out pertama.
             </p>

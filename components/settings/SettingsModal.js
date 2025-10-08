@@ -58,12 +58,7 @@ export default function SettingsModal({ open, onClose, onExport, onImport }) {
   async function handleExport() {
     setBusy(true); setMsg(null);
     try {
-      const data = await onExport();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url; a.download = "K-Flow-backup.json"; a.click();
-      URL.revokeObjectURL(url);
+      await onExport();
       setMsg({ kind: "success", text: "Backup berhasil diunduh." });
     } catch (e) {
       setMsg({ kind: "error", text: `Gagal membuat backup: ${e?.message || e}` });
@@ -254,7 +249,7 @@ function BackupTab({ busy, msg, dropRef, fileRef, onExport, onImport }) {
           </label>
         </div>
         <div className="text-xs text-zinc-500 mt-2">
-          Format: <code>kflow-backup.json</code> disarankan &lt; 5&nbsp;MB.
+          Format: <code>K-Flow-backup.json</code> disarankan &lt; 5&nbsp;MB.
         </div>
       </Card>
 
@@ -285,11 +280,8 @@ function AboutTab() {
   return (
     <div className="space-y-4">
       <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-500">About</h3>
-      <Card title="K-Flow" desc="Pomodoro yang peduli fokus—local-first, private by default.">
+      <Card title="K-Flow (Knowledge Flow)" desc="Pomodoro web app yang mengurangi distraksi dan peduli fokusmu.">
         <ul className="text-sm text-zinc-600 dark:text-zinc-400 list-disc pl-5 space-y-1">
-          <li>Data disimpan di perangkatmu (IndexedDB + localStorage).</li>
-          <li>Tidak ada akun, tidak ada server.</li>
-          <li>Backup/Restore untuk pindah perangkat dengan aman.</li>
         </ul>
       </Card>
     </div>

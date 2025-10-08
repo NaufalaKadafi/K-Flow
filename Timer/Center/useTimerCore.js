@@ -81,7 +81,7 @@ export function useTimerCore({
       notifyWithSound("Sesi Fokus Selesai 🎯", "Waktunya istirahat sejenak!", SOUNDS.FOCUS_END);
       finalizeFocusSummary("auto");
     } else {
-      playSound(SOUNDS.BREAK_END, 0.7);
+      notifyWithSound("Istirahat Selesai ⏰", "Yuk balik fokus lagi!", SOUNDS.BREAK_END);
     }
 
     nextStage(true);
@@ -134,6 +134,7 @@ export function useTimerCore({
     setStageStartedAt(null);
     setActiveMs(0);
     setTickStartAt(null);
+    setLedger([]);
   }
 
   function skip() {
@@ -141,7 +142,8 @@ export function useTimerCore({
     setTgt(null);
     setActiveMs(0);
     setTickStartAt(null);
-    nextStage(false);
+    const clear = stage === "focus";
+    nextStage(clear);
   }
 
   function endNow() {
@@ -150,10 +152,10 @@ export function useTimerCore({
     setTgt(null);
 
     if (stage === "focus") {
-      playSound(SOUNDS.FOCUS_END, 0.7);
+      notifyWithSound("Sesi Fokus Selesai", "Waktunya istirahat sejenak!", SOUNDS.FOCUS_END);
       finalizeFocusSummary("manual");
     } else {
-      playSound(SOUNDS.BREAK_END, 0.7);
+      notifyWithSound("Istirahat Selesai", "Yuk balik fokus lagi!", SOUNDS.BREAK_END);
     }
 
     nextStage(true);
