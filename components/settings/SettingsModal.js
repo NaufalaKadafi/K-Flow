@@ -11,8 +11,6 @@ import FlowGuardPanel from "./FlowGuardPanel";
 const cx = (...a) => a.filter(Boolean).join(" ");
 
 export default function SettingsModal({ open, onClose, onExport, onImport }) {
-  if (!open) return null;
-
   const [tab, setTab] = useState("general");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState(null);
@@ -20,12 +18,14 @@ export default function SettingsModal({ open, onClose, onExport, onImport }) {
   const fileRef = useRef(null);
 
   useEffect(() => {
+    if (!open) return;
     const onKey = (e) => e.key === "Escape" && onClose?.();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [open, onClose]);
 
   useEffect(() => {
+    if (!open) return;
     const el = dropRef.current;
     if (!el) return;
     const stop = (e) => { e.preventDefault(); e.stopPropagation(); };
@@ -46,7 +46,7 @@ export default function SettingsModal({ open, onClose, onExport, onImport }) {
       el.removeEventListener("dragleave", leave);
       el.removeEventListener("drop", drop);
     };
-  }, []);
+  }, [open]);
 
   const tabs = useMemo(() => ([
     { id: "general", label: "General", icon: SettingsIcon },
@@ -78,6 +78,8 @@ export default function SettingsModal({ open, onClose, onExport, onImport }) {
       if (fileRef.current) fileRef.current.value = "";
     }
   }
+
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
