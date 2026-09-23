@@ -2,6 +2,8 @@ import "./globals.css";
 import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import Header from "../components/Header";
 
+const BP = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 export const metadata = {
   title: {
     default: "K-Flow",
@@ -20,7 +22,7 @@ export const metadata = {
     description: "Kurangi distraksi. Naikkan jam fokus—dengan bukti.",
   },
   icons: {
-    icon: "/K-FlowIcon.png",
+    icon: `${BP}/K-FlowIcon.png`,
   },
 };
 

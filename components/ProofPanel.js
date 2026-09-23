@@ -6,6 +6,8 @@ import Reveal from "../lib/Reveal";
 import dynamic from "next/dynamic";
 const StarsMorph = dynamic(() => import("./StarsMorph"), { ssr: false });
 
+const BP = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 
 function useInView(threshold = 0.2) {
   const ref = React.useRef(null);
@@ -108,11 +110,11 @@ function TestimonialCard({ t, emphasis = "center" }) {
 
 
 const TESTIMONIALS = [
-  { name: "Syifa Putri",  role: "UI Designer",  quote: "Lebih gampang mulai; 25 menit pertama jadi kebiasaan.", avatar: "/avatars/syifa.jpg" },
-  { name: "Nicholas Tan", role: "Data Analyst", quote: "Tab-out auto log bikin sadar kapan terdistraksi—fokus time naik tanpa terasa.", avatar: "/avatars/nicholas.jpg" },
-  { name: "Raka Dwi",     role: "CS Student",   quote: "Ledger 1-ketuk itu genius. Catat distraksi tanpa memecah flow.", avatar: "/avatars/raka.jpg" },
-  { name: "Sinta Ayu",    role: "Accountant",   quote: "Review mingguan kasih resep jelas, bukan sekadar grafik. Impact-nya kebukti.", avatar: "/avatars/sinta.jpg" },
-  { name: "Bayu H.",      role: "Law Student",  quote: "Sesi adaptif ngikutin ritme. Pas flow, durasi otomatis lebih panjang.", avatar: "/avatars/bayu.jpg" },
+  { name: "Syifa Putri",  role: "UI Designer",  quote: "Lebih gampang mulai; 25 menit pertama jadi kebiasaan.", avatar: `${BP}/avatars/syifa.jpg` },
+  { name: "Nicholas Tan", role: "Data Analyst", quote: "Tab-out auto log bikin sadar kapan terdistraksi—fokus time naik tanpa terasa.", avatar: `${BP}/avatars/nicholas.jpg` },
+  { name: "Raka Dwi",     role: "CS Student",   quote: "Ledger 1-ketuk itu genius. Catat distraksi tanpa memecah flow.", avatar: `${BP}/avatars/raka.jpg` },
+  { name: "Sinta Ayu",    role: "Accountant",   quote: "Review mingguan kasih resep jelas, bukan sekadar grafik. Impact-nya kebukti.", avatar: `${BP}/avatars/sinta.jpg` },
+  { name: "Bayu H.",      role: "Law Student",  quote: "Sesi adaptif ngikutin ritme. Pas flow, durasi otomatis lebih panjang.", avatar: `${BP}/avatars/bayu.jpg` },
 ];
 
 function Carousel() {

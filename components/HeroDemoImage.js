@@ -4,6 +4,8 @@ import React from "react";
 import useParallax from "../lib/useParallax";
 import Bubble from "./chat/Bubble";
 
+const BP = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 function NameTag({ children }) {
   return (
     <span className="absolute bottom-2 right-3 z-20 rounded-full bg-white/90 text-zinc-900 text-xs font-medium px-2 py-1 shadow-sm">
@@ -72,7 +74,7 @@ export default function HeroDemoImage({ swap = false }) {
   const cardRef = useParallax(5);
 
   const CEWE = {
-    img: "/CeweKerja.jpg",
+    img: `${BP}/CeweKerja.jpg`,
     alt: "Syifa sedang fokus",
     name: "Syifa",
     title: "Sekarang aku lagi…",
@@ -80,7 +82,7 @@ export default function HeroDemoImage({ swap = false }) {
   };
 
   const COWO = {
-    img: "/CowoKerja.jpg",
+    img: `${BP}/CowoKerja.jpg`,
     alt: "Nicholas sedang fokus",
     name: "Nicholas",
     title: "Sesi ini, aku…",
